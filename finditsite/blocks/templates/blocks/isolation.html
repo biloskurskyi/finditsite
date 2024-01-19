@@ -1,0 +1,40 @@
+{% extends 'blocks/base.html' %}
+
+{% block proglinks %}
+<a class="nav-link" href="{% url 'prog1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'prog2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'prog3' %}">Detection & Highlight</a>
+{% endblock %}
+
+{% block photo %}
+<a class="navbar-brand" href="{% url 'home' %}">
+    <img src="/static/blocks/images/logo.webp" alt=""/>
+</a>
+{% endblock %}
+
+{% block user %}
+<a class="nav-link" href="{% url 'log' %}">Log in</a>|
+<a class="nav-link" href="{% url 'reg' %}">Registration</a>
+{% endblock %}
+
+{% block section %}
+<div class="caption">Isolation</div>
+<div class="description">
+    In order for the program to work correctly, please upload two photos:<br/>
+    1. A 2D image of the object you want to recognize in the image.<br/>
+    2. An image that contains this photo. Otherwise, the program will return an error.<br/>
+    *The photos should be in jpg format.<br/>
+    <br/>
+    After processing the images, the results will be returned to you.<br/>
+    <br/>
+    Please <a href="{% url 'log' %}" style="color: lightblue;">log in</a> and kickstart your search!
+
+</div>
+<div class="three-img">
+</div>
+<div class="login-bottom">
+    <a href="{% url 'log' %}" class="login-image-item">
+        <img src="/static/blocks/images/login.png" alt=""/>
+    </a>
+</div>
+{% endblock %}

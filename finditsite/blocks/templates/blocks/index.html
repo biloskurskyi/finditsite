@@ -1,0 +1,48 @@
+{% extends 'blocks/base.html' %}
+
+{% block proglinks %}
+<a class="nav-link" href="{% url 'prog1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'prog2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'prog3' %}">Detection & Highlight</a>
+{% endblock %}
+
+{% block photo %}
+<a class="navbar-brand" href="{% url 'home' %}">
+    <img src="/static/blocks/images/logo.webp" alt=""/>
+</a>
+{% endblock %}
+
+{% block user %}
+<a class="nav-link" href="{% url 'log' %}">Log in</a>|
+<a class="nav-link" href="{% url 'reg' %}">Registration</a>
+{% endblock %}
+
+{% block section %}
+<div class="caption">FindIT</div>
+<div class="description">
+    Greetings! FindIT - your friend to help locate your item in space. How
+    does it work?<br/>
+    It's simple - upload a clear, noise-free photo of the item and a
+    reference image for recognition.<br/>
+    In an instant, your results will be ready! Below, you'll find a range of
+    processing options.<br/>
+    Please <a href="{% url 'log' %}" style="color: lightblue;">log in</a> and kickstart your search!
+</div>
+<div class="three-img">
+    <a href="{% url 'prog1' %}" class="image-item">
+        {% load static %}
+        <img src="{% static 'blocks/images/photo1.jpg' %}" alt=""/>
+    </a>
+    <a href="{% url 'prog2' %}" class="image-item">
+        <img src="{% static 'blocks/images/photo2.jpg' %}" alt=""/>
+    </a>
+    <a href="{% url 'prog3' %}" class="image-item">
+        <img src="{% static 'blocks/images/photo3.jpg' %}" alt=""/>
+    </a>
+</div>
+<div class="login-bottom">
+    <a href="{% url 'log' %}" class="login-image-item">
+        <img src="{% static 'blocks/images/login.png' %}" alt=""/>
+    </a>
+</div>
+{% endblock %}
