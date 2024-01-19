@@ -155,7 +155,7 @@ from celery import Celery
 
 BROKER_URL = 'pyamqp://localhost//'
 
-CELERY_RESULT_BACKEND = 'db+sqlite:///results.db'
+# CELERY_RESULT_BACKEND = 'db+sqlite:///results.db'
 
 app = Celery('finditsite')
 app.config_from_object('django.conf:settings', namespace='CELERY')
