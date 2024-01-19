@@ -19,10 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-bubg9lweq_jgo$cg#86(@n@gum#%@(9wred)2u*zv97zy@twj!'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -117,46 +115,9 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = '/login/'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = []
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} [{server_port}] {message}',
-            'style': '{',
-        },
-    },
-}
-
-from celery import Celery
-
-BROKER_URL = 'pyamqp://localhost//'
-
-# CELERY_RESULT_BACKEND = 'db+sqlite:///results.db'
-
-app = Celery('finditsite')
-app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks()
