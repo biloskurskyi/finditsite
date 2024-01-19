@@ -1,0 +1,81 @@
+{% extends 'blocks/base.html' %}
+
+{% block proglinks %}
+<a class="nav-link" href="{% url 'prog1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'prog2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'prog3' %}">Detection & Highlight</a>
+{% endblock %}
+
+{% block photo %}
+<a class="navbar-brand" href="{% url 'home' %}">
+              <img src="/static/blocks/images/logo.webp" alt="" />
+            </a>
+{% endblock %}
+
+{% block user %}
+<a class="nav-link" href="{% url 'log' %}">Log in</a>|
+<a class="nav-link" href="{% url 'reg' %}">Registration</a>
+{% endblock %}
+
+{% block section %}
+<div class="caption">Registration</div>
+<div class="registr">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="name">
+            <div class="reginfo">Username</div>
+            {{form.username}}
+        </div>
+        <div class="email">
+            <div class="reginfo">Email</div>
+            {{form.email}}
+        </div>
+        <div class="password1">
+            <div class="reginfo">Password</div>
+            {{form.password1}}
+        </div>
+        <div class="password2">
+            <div class="reginfo">Confirm password</div>
+            {{form.password2}}
+        </div>
+
+         <div class="logquestion">Already have an account?  <a href="{% url 'log'%}" style="color: lightblue;">Log in</a></div>
+        <div class="buttonsubmit">
+        <button type="submit">Submit</button>
+        </div>
+    </form>
+    {{ form.errors }}
+</div>
+<script>
+    var form_fields = document.getElementsByTagName('input')
+    form_fields[1].placeholder='Enter username..';
+    form_fields[2].placeholder='Enter email..';
+    form_fields[3].placeholder='Enter password..';
+    form_fields[4].placeholder='Re-enter password..';
+
+    for(var field in form_fields){
+    form_fields[field].className += ' form-control'
+    }
+</script>
+
+{% endblock %}
+
+<!--
+<form method="POST" action="">
+    <div class="caption">Registration</div>
+    {% csrf_token %}
+    {{form.username.label}}
+    {{form.username}}
+
+    {{form.email.label}}
+    {{form.email}}
+
+    {{form.password1.label}}
+    {{form.password1}}
+
+    {{form.password2.label}}
+    {{form.password2}}
+
+    <input type="submit" name="Create User">
+</form>
+-->

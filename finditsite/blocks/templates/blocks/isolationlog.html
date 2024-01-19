@@ -1,0 +1,170 @@
+{% extends 'blocks/base.html' %}
+
+{% block proglinks %}
+<a class="nav-link" href="{% url 'workprog1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'workprog2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'workprog3' %}">Detection & Highlight</a>
+{% endblock %}
+
+{% block photo %}
+<a class="navbar-brand" href="{% url 'loghome' %}">
+    <img src="/static/blocks/images/logo.webp" alt=""/>
+</a>
+{% endblock %}
+
+{% block user %}
+<a class="nav-link" href="{% url 'loghome' %}">{{request.user}}</a>|
+<a class="nav-link" href="{% url 'reg' %}">Log out</a>
+{% endblock %}
+
+{% block section %}
+<div class="caption">Isolation</div>
+<div class="description">
+    In order for the program to work correctly, please upload two photos:<br/>
+    1. A 2D image of the object you want to recognize in the image.<br/>
+    2. An image that contains this photo. Otherwise, the program will return an error.<br/>
+    *The photos should be in jpg format.<br/>
+    <br/>
+    After processing the images, the results will be returned to you.
+
+</div>
+
+
+<a class="final-img">
+    <div id="imageContainer">
+        {% if latest_photo.image %}
+        <img id="mainImage" src="{{ latest_photo.image.url }}">
+        <p id="imageDate">{{ latest_photo.added_at }}</p>
+        {% else %}
+        <p id="noImage">No image available</p>
+        {% endif %}
+    </div>
+</a>
+
+<div id="photoProcessStatus">
+    Status: {{ latest_photo.status }}
+</div>
+
+
+<div class="history">History</div>
+<div id="latest-dates">
+    <ul>
+        {% for date in latest_dates %}
+        <li>{{ forloop.counter }}. {{ date }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+<div class="buttonsubmit">
+    <a href="{% url 'open_better_script2' %}?script_path=D:/work/project1/finditsite/2_better.py&redirect_path=workprog2&template_name=blocks/isolationlog.html" class="download-button">Download your photo</a>
+</div>
+
+<!--<div class="buttonsubmit">
+    <a href="{% url 'open_better_script2' %}" class="download-button">Download your photo</a>
+</div>-->
+
+
+<script>
+function updateImage(newImageURL, addedAt) {
+    var img = document.getElementById("mainImage");
+    var time = document.getElementById("imageDate");
+    var noImage = document.getElementById("noImage");
+
+    if (img) {
+        img.src = newImageURL;
+        time.textContent = addedAt;
+    } else {
+        noImage.textContent = "";
+        var imageContainer = document.getElementById("imageContainer");
+        var newImg = document.createElement("img");
+        newImg.id = "mainImage";
+        newImg.src = newImageURL;
+        var newTime = document.createElement("p");
+        newTime.id = "imageDate";
+        newTime.textContent = addedAt;
+        imageContainer.appendChild(newImg);
+        imageContainer.appendChild(newTime);
+    }
+}
+
+function checkForUpdate() {
+    var xhr = new XMLHttpRequest();
+    var user_id = {{ user.id }};  // Отримати user_id з шаблона
+    xhr.open("GET", "{% url 'get_latest_photo2' %}?user_id=" + user_id, true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.image_url) {
+                updateImage(response.image_url, response.added_at);
+            }
+        }
+    };
+
+    xhr.send();
+}
+
+
+
+
+checkForUpdate();
+
+setInterval(checkForUpdate, 5000);
+
+
+
+
+</script>
+
+
+<script>
+function updatePhotoProcessStatus() {
+    var xhr = new XMLHttpRequest();
+    var user_id = {{ user.id }};  // Отримати user_id з шаблона
+    xhr.open("GET", "{% url 'get_photo_process_status' %}?user_id=" + user_id, true);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            var status = response.status;
+            var statusElement = document.getElementById("photoProcessStatus");
+            if (statusElement) {
+                statusElement.textContent = "Status: " + status;
+            }
+        }
+    };
+
+    xhr.send();
+}
+
+updatePhotoProcessStatus();
+setInterval(updatePhotoProcessStatus, 5000);  // Оновлювати статус кожні 5 секунд
+
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+function updateLatestDates() {
+    $.ajax({
+        url: "{% url 'get_latest_dates2' %}",
+        success: function(data) {
+            var datesList = data.latest_dates;
+            var datesHtml = '<ul>';
+            for (var i = 0; i < datesList.length; i++) {
+                datesHtml += '<li>' + (i + 1) + '. ' + datesList[i] + '</li>';
+            }
+            datesHtml += '</ul>';
+            $("#latest-dates").html(datesHtml);
+        }
+    });
+}
+
+updateLatestDates();
+
+setInterval(updateLatestDates, 5000);
+</script>
+
+{% endblock %}

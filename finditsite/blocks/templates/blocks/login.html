@@ -1,0 +1,57 @@
+{% extends 'blocks/base.html' %}
+
+{% block proglinks %}
+<a class="nav-link" href="{% url 'prog1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'prog2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'prog3' %}">Detection & Highlight</a>
+{% endblock %}
+
+{% block photo %}
+<a class="navbar-brand" href="{% url 'home' %}">
+              <img src="/static/blocks/images/logo.webp" alt="" />
+            </a>
+{% endblock %}
+
+{% block user %}
+<a class="nav-link" href="{% url 'log' %}">Log in</a>|
+<a class="nav-link" href="{% url 'reg' %}">Registration</a>
+{% endblock %}
+
+{% block section %}
+<div class="caption">Login</div>
+<div class="registr">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="name">
+            <div class="reginfo">Username</div>
+            <input type="text" name="username" placeholder="Enter username..">
+        </div>
+        <div class="password1">
+            <div class="reginfo">Password</div>
+            <input type="password" name="password" placeholder="Enter password..">
+        </div>
+        {{ form.errors }}
+        <div class="logquestion">Don't have an account? <a href="{% url 'reg' %}" style="color: lightblue;">Register</a>
+        </div>
+        {% for message in messages %}
+        <p id="messages">{{ message }}</p>
+        {% endfor %}
+
+        <div class="buttonsubmit">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<script>
+    var form_fields = document.getElementsByTagName('input');
+    form_fields[1].placeholder = 'Enter username..';
+    form_fields[2].placeholder = 'Enter password..';
+
+    for (var i = 0; i < form_fields.length; i++) {
+        form_fields[i].className += ' form-control';
+    }
+
+
+
+</script>
+{% endblock %}
