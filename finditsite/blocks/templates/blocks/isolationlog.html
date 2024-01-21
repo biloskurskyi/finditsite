@@ -1,20 +1,20 @@
 {% extends 'blocks/base.html' %}
 
 {% block proglinks %}
-<a class="nav-link" href="{% url 'workprog1' %}">Common Pixels</a>
-<a class="nav-link" href="{% url 'workprog2' %}">Isolation</a>
-<a class="nav-link" href="{% url 'workprog3' %}">Detection & Highlight</a>
+<a class="nav-link" href="{% url 'blocks:workprog1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'blocks:workprog2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'blocks:workprog3' %}">Detection & Highlight</a>
 {% endblock %}
 
 {% block photo %}
-<a class="navbar-brand" href="{% url 'loghome' %}">
+<a class="navbar-brand" href="{% url 'blocks:loghome' %}">
     <img src="/static/blocks/images/logo.webp" alt=""/>
 </a>
 {% endblock %}
 
 {% block user %}
-<a class="nav-link" href="{% url 'loghome' %}">{{request.user}}</a>|
-<a class="nav-link" href="{% url 'reg' %}">Log out</a>
+<a class="nav-link" href="{% url 'blocks:loghome' %}">{{request.user}}</a>|
+<a class="nav-link" href="{% url 'blocks:reg' %}">Log out</a>
 {% endblock %}
 
 {% block section %}
@@ -57,12 +57,10 @@
 
 
 <div class="buttonsubmit">
-    <a href="{% url 'open_better_script2' %}?script_path=D:/work/project1/finditsite/2_better.py&redirect_path=workprog2&template_name=blocks/isolationlog.html" class="download-button">Download your photo</a>
+    <a href="{% url 'blocks:open_better_script2' %}?script_path=D:/work/project1/finditsite/2_better.py&redirect_path=workprog2&template_name=blocks/isolationlog.html" class="download-button">Download your photo</a>
 </div>
 
-<!--<div class="buttonsubmit">
-    <a href="{% url 'open_better_script2' %}" class="download-button">Download your photo</a>
-</div>-->
+
 
 
 <script>
@@ -91,7 +89,7 @@ function updateImage(newImageURL, addedAt) {
 function checkForUpdate() {
     var xhr = new XMLHttpRequest();
     var user_id = {{ user.id }};  // Отримати user_id з шаблона
-    xhr.open("GET", "{% url 'get_latest_photo2' %}?user_id=" + user_id, true);
+    xhr.open("GET", "{% url 'blocks:get_latest_photo2' %}?user_id=" + user_id, true);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -122,7 +120,7 @@ setInterval(checkForUpdate, 5000);
 function updatePhotoProcessStatus() {
     var xhr = new XMLHttpRequest();
     var user_id = {{ user.id }};  // Отримати user_id з шаблона
-    xhr.open("GET", "{% url 'get_photo_process_status' %}?user_id=" + user_id, true);
+    xhr.open("GET", "{% url 'blocks:get_photo_process_status' %}?user_id=" + user_id, true);
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -149,7 +147,7 @@ setInterval(updatePhotoProcessStatus, 5000);  // Оновлювати стату
 <script>
 function updateLatestDates() {
     $.ajax({
-        url: "{% url 'get_latest_dates2' %}",
+        url: "{% url 'blocks:get_latest_dates2' %}",
         success: function(data) {
             var datesList = data.latest_dates;
             var datesHtml = '<ul>';

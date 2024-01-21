@@ -1,52 +1,60 @@
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect
-from .models import CreateUserForm, PhotoProcess
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView
+from common.views import TitleMixin
+from .models import PhotoProcess
+from .forms import CreateUserForm, UserLoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 import subprocess
 from blocks.models import KeyPoints
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import JsonResponse
+from django.views.generic.edit import CreateView
+from django.contrib.auth.models import User
 
 
-def index(request):
-    return render(request, "blocks/index.html")
+class IndexView(TitleMixin, TemplateView):
+    template_name = "blocks/index.html"
+    title = "FindIt"
 
 
-def main(request):
-    return render(request, "blocks/main.html")
+class MianView(TitleMixin, TemplateView):
+    template_name = "blocks/main.html"
+    title = "FindIt - menu"
 
 
-def common(request):
-    return render(request, "blocks/common.html")
+class CommonView(TitleMixin, TemplateView):
+    template_name = "blocks/common.html"
+    title = "FindIt - log in to use this page"
 
 
-def is_admin(user):
-    return user.is_superuser
+class CommonLogView(TitleMixin, TemplateView):
+    template_name = "blocks/commonlog.html"
+    title = "FindIt - Common img"
 
 
-def commonlog(request):
-    user = request.user
-    latest_photos = KeyPoints.objects.filter(user=user, category_id=1).order_by('-added_at')[:5]
-    return render(request, 'blocks/commonlog.html', {'latest_photos': latest_photos})
+class IsolationView(TitleMixin, TemplateView):
+    template_name = "blocks/isolation.html"
+    title = "FindIt - log in to use this page"
 
 
-def isolation(request):
-    return render(request, "blocks/isolation.html")
+class IsolationLogView(TitleMixin, TemplateView):
+    template_name = "blocks/isolationlog.html"
+    title = "FindIt - Isolation log"
 
 
-def isolationlog(request):
-    user = request.user
-    latest_photos = KeyPoints.objects.filter(user=user, category_id=2).order_by('-added_at')[:5]
-    return render(request, "blocks/isolationlog.html", {'latest_photos': latest_photos})
+class DetectionView(TitleMixin, TemplateView):
+    template_name = "blocks/detection.html"
+    title = "FindIt - log in to use this page"
 
 
-def detection(request):
-    return render(request, "blocks/detection.html")
-
-
-def detectionlog(request):
-    user = request.user
-    latest_photos = KeyPoints.objects.filter(user=user, category_id=3).order_by('-added_at')[:5]
-    return render(request, "blocks/detectionlog.html", {'latest_photos': latest_photos})
+class DetectionLogView(TitleMixin, TemplateView):
+    template_name = "blocks/detectionlog.html"
+    title = "FindIt - Detection log"
 
 
 def open_better_script(request, script_path, redirect_path, template_name):
@@ -91,9 +99,6 @@ def get_latest_dates(request, category_id):
         return JsonResponse({"error": "User is not authenticated"})
 
 
-from django.http import JsonResponse
-
-
 def get_photo_process_status(request):
     user_id = request.GET.get('user_id')
     photo_processes = PhotoProcess.objects.filter(user_id=user_id)
@@ -106,140 +111,40 @@ def get_photo_process_status(request):
     return JsonResponse({'status': status})
 
 
-def registration(request):
-    form = CreateUserForm()
-
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            key_points = KeyPoints(user=user)
-            key_points.save()
-
-            messages.success(request, 'Account was created for ' + user.username)
-
-            return redirect('log')
-
-    context = {'form': form}
-    return render(request, "blocks/registration.html", context)
-
-
-def loginPG(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('loghome')
-        else:
-            messages.info(request, 'Username OR password is incorrect')
-
-    context = {}
-    return render(request, 'blocks/login.html', context)
+# def registration(request):
+#     form = CreateUserForm()
+#
+#     if request.method == 'POST':
+#         form = CreateUserForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             key_points = KeyPoints(user=user)
+#             key_points.save()
+#
+#             messages.success(request, 'Account was created for ' + user.username)
+#
+#             return redirect('log')
+#
+#     context = {'form': form}
+#     return render(request, "blocks/registration.html", context)
 
 
-def logoutPG(request):
-    logout(request)
-    return redirect('log')
+class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
+    model = User
+    form_class = CreateUserForm
+    template_name = 'blocks/registration.html'
+    success_url = reverse_lazy('blocks:log')
+    success_message = 'Registration is successfully done!'
+    title = 'FindIt - Registration'
 
 
-'''
-def open_better_script(request):
-    try:
-        user_id = None
-
-        if request.user.is_authenticated:
-            user_id = request.user.id
-        print("------------", user_id)
-
-        subprocess.Popen(
-            ['python', 'D:/work/project1/finditsite/1_better.py', str(user_id)])
-        return redirect('workprog1')
-    except Exception as e:
-        return render(request, 'blocks/commonlog.html', {'message': f'Помилка: {str(e)}'})
+class UserLoginView(TitleMixin, LoginView):
+    template_name = 'blocks/login.html'
+    form_class = UserLoginForm
+    title = 'FindIt - LogIn'
 
 
-def open_better_script2(request):
-    try:
-        user_id = None
-
-        if request.user.is_authenticated:
-            user_id = request.user.id
-        print("------------", user_id)
-
-        subprocess.Popen(
-            ['python', 'D:/work/project1/finditsite/2_better.py', str(user_id)])
-        return redirect('workprog2')
-    except Exception as e:
-        return render(request, 'blocks/isolation.html', {'message': f'Помилка: {str(e)}'})
-
-
-def open_better_script3(request):
-    try:
-        user_id = None
-
-        if request.user.is_authenticated:
-            user_id = request.user.id
-        print("------------", user_id)
-
-        subprocess.Popen(
-            ['python', 'D:/work/project1/finditsite/3_better.py', str(user_id)])
-        return redirect('workprog3')
-    except Exception as e:
-        return render(request, 'blocks/detection.html', {'message': f'Помилка: {str(e)}'})
-'''
-"""
-def get_latest_photo2(request):
-    if request.user.is_authenticated:
-        user_id = request.user.id
-        latest_photo = KeyPoints.objects.filter(user_id=user_id, category_id=2).order_by('-added_at').first()
-        if latest_photo:
-            data = {
-                "image_url": latest_photo.image.url,
-                "added_at": latest_photo.added_at.strftime('%Y-%m-%d %H:%M:%S')
-            }
-            return JsonResponse(data)
-        else:
-            return JsonResponse({"error": "No latest photo available"})
-    else:
-        return JsonResponse({"error": "User is not authenticated"})
-
-
-def get_latest_photo3(request):
-    if request.user.is_authenticated:
-        user_id = request.user.id
-        latest_photo = KeyPoints.objects.filter(user_id=user_id, category_id=3).order_by('-added_at').first()
-        if latest_photo:
-            data = {
-                "image_url": latest_photo.image.url,
-                "added_at": latest_photo.added_at.strftime('%Y-%m-%d %H:%M:%S')
-            }
-            return JsonResponse(data)
-        else:
-            return JsonResponse({"error": "No latest photo available"})
-    else:
-        return JsonResponse({"error": "User is not authenticated"})
-"""
-"""
-def get_latest_dates2(request):
-    if request.user.is_authenticated:
-        user_id = request.user.id
-        latest_dates = KeyPoints.objects.filter(user_id=user_id, category_id=2).order_by('-added_at')[:5].values(
-            'added_at')
-        dates_list = [entry['added_at'] for entry in latest_dates]
-        return JsonResponse({'latest_dates': dates_list})
-    else:
-        return JsonResponse({"error": "User is not authenticated"})
-
-
-def get_latest_dates3(request):
-    if request.user.is_authenticated:
-        user_id = request.user.id
-        latest_dates = KeyPoints.objects.filter(user_id=user_id, category_id=3).order_by('-added_at')[:5].values(
-            'added_at')
-        dates_list = [entry['added_at'] for entry in latest_dates]
-        return JsonResponse({'latest_dates': dates_list})
-    else:
-        return JsonResponse({"error": "User is not authenticated"})
-"""
+class UserChecker:
+    @staticmethod
+    def is_admin(user):
+        return user.is_superuser

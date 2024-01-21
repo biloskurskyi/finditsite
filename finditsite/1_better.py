@@ -3,8 +3,7 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 import django
-from celery import shared_task, Celery
-from django.conf import settings
+from celery import shared_task
 
 from django.core.files.base import ContentFile
 
@@ -121,7 +120,6 @@ else:
 
 photo_process.status = "Ready"
 photo_process.save()
-
 
 """import cv2
 import json

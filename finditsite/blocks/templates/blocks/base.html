@@ -1,60 +1,61 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" href="{% static 'blocks/css/styles.css' %}" rel="stylesheet" />
-    <title>FindIT</title>
+    <link type="text/css" href="{% static 'blocks/css/styles.css' %}" rel="stylesheet"/>
+    <title>{{ title }}</title>
     <link rel="icon" type="image/png" href="/static/blocks/images/logo.webp">
-  </head>
-  <body>
-    {% block header %}
-      <header>
-        <div class="container">
-          <div class="main">
+</head>
+<body>
+{% block header %}
+<header>
+    <div class="container">
+        <div class="main">
             {% block photo%}
             {% endblock %}
             {% block proglinks %}
             {% endblock %}
-          </div>
-          <div class="login">
+        </div>
+        <div class="login">
             {% block user %}
             {% endblock %}
-          </div>
         </div>
-      </header>
-    {% endblock %}
+    </div>
+</header>
+{% endblock %}
 
-    <section class="content">
-      {% block section %}{% endblock %}
-    </section>
+<section class="content">
+    {% block section %}{% endblock %}
+</section>
 
 
-    {% block footer %}
-      <footer class="mt-4">
-        <div class="container-fluid">
-          <div class="row">
+{% block footer %}
+<footer class="mt-4">
+    <div class="container-fluid">
+        <div class="row">
             <div class="footer-text text-left col-lg-4">
-              <p>&copy; biloskurskyiCODE</p>
+                <p>&copy; biloskurskyiCODE</p>
             </div>
             <div class="footer-text text-center col-lg-4">
-              <p>
-                Partial or complete copying of information from this site for
-                <br />distribution on other resources is strictly prohibited!
-              </p>
+                <p>
+                    Partial or complete copying of information from this site for
+                    <br/>distribution on other resources is strictly prohibited!
+                </p>
             </div>
             <div class="media-links col-lg-4">
-              <a href="https://t.me/biloskurskyi"
+                <a href="https://t.me/biloskurskyi"
                 ><img src="{% static 'blocks/images/tg.webp' %}" alt="Telegram"
-              /></a>
-              <a href="https://www.linkedin.com/in/valerii-biloskurskyi-175429281/"
+                /></a>
+                <a href="https://www.linkedin.com/in/valerii-biloskurskyi-175429281/"
                 ><img src="{% static 'blocks/images/in.webp' %}" alt="LinkedIn"
-              /></a>
+                /></a>
             </div>
-          </div>
         </div>
-      </footer>
-    {% endblock %}
-  </body>
+    </div>
+</footer>
+{% endblock %}
+</body>
 </html>

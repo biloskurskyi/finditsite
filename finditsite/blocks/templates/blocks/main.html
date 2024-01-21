@@ -1,20 +1,20 @@
 {% extends 'blocks/base.html' %}
 
 {% block proglinks %}
-<a class="nav-link" href="{% url 'workprog1' %}">Common Pixels</a>
-<a class="nav-link" href="{% url 'workprog2' %}">Isolation</a>
-<a class="nav-link" href="{% url 'workprog3' %}">Detection & Highlight</a>
+<a class="nav-link" href="{% url 'blocks:workprog1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'blocks:workprog2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'blocks:workprog3' %}">Detection & Highlight</a>
 {% endblock %}
 
 {% block photo %}
-<a class="navbar-brand" href="{% url 'loghome' %}">
+<a class="navbar-brand" href="{% url 'blocks:loghome' %}">
               <img src="/static/blocks/images/logo.webp" alt="" />
             </a>
 {% endblock %}
 
 {% block user %}
-<a class="nav-link" href="{% url 'loghome' %}">{{request.user}}</a>|
-<a class="nav-link" href="{% url 'reg' %}">Log out</a>
+<a class="nav-link" href="{% url 'blocks:loghome' %}">{{request.user}}</a>|
+<a class="nav-link" href="{% url 'blocks:reg' %}">Log out</a>
 {% endblock %}
 
 {% block section %}
@@ -30,19 +30,19 @@
 </div>
 <div class="three-img">
     {% load static %}
-    <a href="{% url 'workprog1' %}" class="image-item">
+    <a href="{% url 'blocks:workprog1' %}" class="image-item">
         <img src="{% static 'blocks/images/photo1.jpg' %}" alt=""/>
         <p>This category will help you identify common elements in the image and highlight their pixels. 90% of the
             pixels in the image match precisely with the original photo, which helps accurately pinpoint the object's
             location.</p>
     </a>
-    <a href="{% url 'workprog2' %}" class="image-item">
+    <a href="{% url 'blocks:workprog2' %}" class="image-item">
         <img src="{% static 'blocks/images/photo2.jpg' %}" alt=""/>
         <p>Do you need to quickly process a photo and remove everything except the desired object? The Isolation
             category excels at this - simply upload the object's photo, and in a short moment, the isolated element will
             be ready!</p>
     </a>
-    <a href="{% url 'workprog3' %}" class="image-item">
+    <a href="{% url 'blocks:workprog3' %}" class="image-item">
         <img src="{% static 'blocks/images/photo3.jpg' %}" alt=""/>
         <p>Detection & Highlight will help you find and highlight even the smallest object in a photo that may not be
             noticeable to the human eye. The colored square will clearly highlight the element in the photo that you
