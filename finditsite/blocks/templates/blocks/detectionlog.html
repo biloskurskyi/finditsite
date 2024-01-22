@@ -1,19 +1,19 @@
 {% extends 'blocks/base.html' %}
 
 {% block proglinks %}
-<a class="nav-link" href="{% url 'blocks:workprog1' %}">Common Pixels</a>
-<a class="nav-link" href="{% url 'blocks:workprog2' %}">Isolation</a>
-<a class="nav-link" href="{% url 'blocks:workprog3' %}">Detection & Highlight</a>
+<a class="nav-link" href="{% url 'blocks:work_prog_1' %}">Common Pixels</a>
+<a class="nav-link" href="{% url 'blocks:work_prog_2' %}">Isolation</a>
+<a class="nav-link" href="{% url 'blocks:work_prog_3' %}">Detection & Highlight</a>
 {% endblock %}
 
 {% block photo %}
-<a class="navbar-brand" href="{% url 'blocks:loghome' %}">
+<a class="navbar-brand" href="{% url 'blocks:log_home' %}">
     <img src="/static/blocks/images/logo.webp" alt=""/>
 </a>
 {% endblock %}
 
 {% block user %}
-<a class="nav-link" href="{% url 'blocks:loghome' %}">{{request.user}}</a>|
+<a class="nav-link" href="{% url 'blocks:log_home' %}">{{request.user}}</a>|
 <a class="nav-link" href="{% url 'blocks:reg' %}">Log out</a>
 {% endblock %}
 
@@ -55,7 +55,7 @@
 </div>
 
 <div class="buttonsubmit">
-    <a href="{% url 'blocks:open_better_script3' %}?script_path=D:/work/project1/finditsite/3_better.py&redirect_path=workprog3&template_name=blocks/detectionlog.html" class="download-button">Download your photo</a>
+    <a href="{% url 'blocks:open_better_script3' %}?script_path=D:/work/project1/finditsite/3_better.py&redirect_path=work_prog_3&template_name=blocks/detectionlog.html" class="download-button">Download your photo</a>
 </div>
 
 
