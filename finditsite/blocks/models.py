@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
+from django.contrib.auth.signals import user_logged_out
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.signals import user_logged_out
 
 
 class KeyPoints(models.Model):
