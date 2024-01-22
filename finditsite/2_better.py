@@ -101,10 +101,6 @@ def find_image(template_path, reference_path, user_id):
             photo_process.save()
             print("Error: Неможливо змінити розмір відповідного зображення.")
 
-        """ Відображення об'єднаного зображення
-        cv2.imshow('Combined Image', combined_image)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()"""
 
 
 user_id = None
@@ -132,34 +128,3 @@ else:
 
 photo_process.status = "Ready"
 photo_process.save()
-
-'''
-template_image1_path = cv2.imread(select_image())
-reference_image1_path = cv2.imread(select_image())
-find_image(template_image1_path, reference_image1_path)
-
-        plt.figure(figsize=(10, 5))
-        plt.subplot(1, 2, 1)
-        plt.imshow(cv2.cvtColor(template_path, cv2.COLOR_BGR2RGB))
-        plt.title('Template Image')
-
-        plt.subplot(1, 2, 2)
-        plt.imshow(cv2.cvtColor(aligned_template, cv2.COLOR_BGR2RGB))
-        plt.title('Aligned Template Image')
-        plt.show()
-'''
-
-# find_image(template_image2_path, reference_image2_path)
-# find_image(template_image3_path, reference_image3_path)
-# find_image(template_image6_path, reference_image6_path)
-# find_image(template_image6_path, reference_image7_path)
-
-
-'''template_image2_path = cv2.imread('template_tea_cup_pad_2.jpg')
-reference_image2_path = cv2.imread('find_tea_cup_pad_pose.jpg')
-template_image3_path = cv2.imread('photo_2023-10-17_18-45-31.jpg')
-reference_image3_path = cv2.imread('photo_2023-10-17_18-45-50.jpg')
-template_image6_path = cv2.imread('paris1.jpg')
-reference_image6_path = cv2.imread('paris2.jpg')
-reference_image7_path = cv2.imread('paris3.jpg')
-'''
