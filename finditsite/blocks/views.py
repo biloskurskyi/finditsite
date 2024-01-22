@@ -1,7 +1,7 @@
 import subprocess
 
 from blocks.models import KeyPoints
-from common.views import TitleMixin
+from common.views import TitleMixin, BaseView
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -15,42 +15,41 @@ from .forms import CreateUserForm, UserLoginForm
 from .models import PhotoProcess
 
 
-class IndexView(TitleMixin, TemplateView):
+class IndexView(BaseView):
     template_name = "blocks/index.html"
-    title = "FindIt"
 
 
-class MianView(TitleMixin, TemplateView):
+class MianView(BaseView):
     template_name = "blocks/main.html"
     title = "FindIt - menu"
 
 
-class CommonView(TitleMixin, TemplateView):
+class CommonView(BaseView):
     template_name = "blocks/common.html"
     title = "FindIt - log in to use this page"
 
 
-class CommonLogView(TitleMixin, TemplateView):
+class CommonLogView(BaseView):
     template_name = "blocks/commonlog.html"
     title = "FindIt - Common img"
 
 
-class IsolationView(TitleMixin, TemplateView):
+class IsolationView(BaseView):
     template_name = "blocks/isolation.html"
     title = "FindIt - log in to use this page"
 
 
-class IsolationLogView(TitleMixin, TemplateView):
+class IsolationLogView(BaseView):
     template_name = "blocks/isolationlog.html"
     title = "FindIt - Isolation img"
 
 
-class DetectionView(TitleMixin, TemplateView):
+class DetectionView(BaseView):
     template_name = "blocks/detection.html"
     title = "FindIt - log in to use this page"
 
 
-class DetectionLogView(TitleMixin, TemplateView):
+class DetectionLogView(BaseView):
     template_name = "blocks/detectionlog.html"
     title = "FindIt - Detection img"
 
