@@ -1,5 +1,3 @@
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect
@@ -8,8 +6,6 @@ from django.views.generic import TemplateView
 from common.views import TitleMixin
 from .models import PhotoProcess
 from .forms import CreateUserForm, UserLoginForm
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
 import subprocess
 from blocks.models import KeyPoints
 from django.http import JsonResponse
@@ -44,7 +40,7 @@ class IsolationView(TitleMixin, TemplateView):
 
 class IsolationLogView(TitleMixin, TemplateView):
     template_name = "blocks/isolationlog.html"
-    title = "FindIt - Isolation log"
+    title = "FindIt - Isolation img"
 
 
 class DetectionView(TitleMixin, TemplateView):
@@ -54,7 +50,7 @@ class DetectionView(TitleMixin, TemplateView):
 
 class DetectionLogView(TitleMixin, TemplateView):
     template_name = "blocks/detectionlog.html"
-    title = "FindIt - Detection log"
+    title = "FindIt - Detection img"
 
 
 def open_better_script(request, script_path, redirect_path, template_name):
@@ -109,24 +105,6 @@ def get_photo_process_status(request):
         status = "Not found"
 
     return JsonResponse({'status': status})
-
-
-# def registration(request):
-#     form = CreateUserForm()
-#
-#     if request.method == 'POST':
-#         form = CreateUserForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             key_points = KeyPoints(user=user)
-#             key_points.save()
-#
-#             messages.success(request, 'Account was created for ' + user.username)
-#
-#             return redirect('log')
-#
-#     context = {'form': form}
-#     return render(request, "blocks/registration.html", context)
 
 
 class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
