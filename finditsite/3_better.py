@@ -1,20 +1,20 @@
-import cv2
+import os
 import tkinter as tk
 from tkinter import filedialog
-import os
+
+import cv2
 import django
 import numpy as np
-
 from django.core.files.base import ContentFile
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "finditsite.settings")
 
 django.setup()
 
-from django.core.files import File
-from blocks.models import KeyPoints, PhotoProcess
-
 import sys
+
+from blocks.models import KeyPoints, PhotoProcess
+from django.core.files import File
 
 
 def create_photo_process(user_id):

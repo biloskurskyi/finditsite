@@ -1,16 +1,18 @@
+import subprocess
+
+from blocks.models import KeyPoints
+from common.views import TitleMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
-from common.views import TitleMixin
-from .models import PhotoProcess
-from .forms import CreateUserForm, UserLoginForm
-import subprocess
-from blocks.models import KeyPoints
-from django.http import JsonResponse
 from django.views.generic.edit import CreateView
-from django.contrib.auth.models import User
+
+from .forms import CreateUserForm, UserLoginForm
+from .models import PhotoProcess
 
 
 class IndexView(TitleMixin, TemplateView):
