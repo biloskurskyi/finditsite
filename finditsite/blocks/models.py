@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.signals import user_logged_out
 
 
 class KeyPoints(models.Model):
@@ -12,6 +13,9 @@ class KeyPoints(models.Model):
     def __str__(self):
         return str(self.added_at)
 
+    class Meta:
+        verbose_name_plural = "Photos info"
+
 
 class PhotoProcess(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -20,8 +24,8 @@ class PhotoProcess(models.Model):
     def __str__(self):
         return f'Photo Process for User {self.user}'
 
-
-from django.contrib.auth.signals import user_logged_out
+    class Meta:
+        verbose_name_plural = "Photo Process"
 
 
 def delete_photo_processes(sender, request, **kwargs):
@@ -31,20 +35,3 @@ def delete_photo_processes(sender, request, **kwargs):
 
 
 user_logged_out.connect(delete_photo_processes)
-
-"""
-class KeyPointsIsolation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    image = models.ImageField(upload_to='photos/')
-    added_at = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return str(self.added_at)
-
-
-class PhotoProcessIsolation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    status = models.CharField(max_length=50, default='Processing')  # Статус фото: Processing, Analyzing, Ready
-
-    def __str__(self):
-        return f'Photo Process for User {self.user}'"""
