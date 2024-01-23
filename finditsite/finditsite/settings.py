@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-redacted'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
