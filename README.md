@@ -1,4 +1,4 @@
-FindIt: Your Personal Photo Recognition Tool  
+# FindIt: Your Personal Photo Recognition Tool  
 Greetings! Welcome to FindIt – my inaugural pet project developed on Django and powered by TensorFlow.  
    
 FindIt is a web application designed to recognize parts of photos using advanced 2D models.    
