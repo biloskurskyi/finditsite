@@ -1,7 +1,5 @@
 import subprocess
 
-from blocks.models import KeyPoints
-from common.views import TitleMixin, BaseView
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -10,6 +8,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
+
+from blocks.models import KeyPoints
+from common.views import BaseView, TitleMixin
 
 from .forms import CreateUserForm, UserLoginForm
 from .models import PhotoProcess

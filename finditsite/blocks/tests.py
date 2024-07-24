@@ -10,11 +10,14 @@ import django
 
 django.setup()
 
+from http import HTTPStatus
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-from http import HTTPStatus
-from blocks.views import IndexView  # Assuming your views module is named 'blocks.views'
+
+from blocks.views import \
+    IndexView  # Assuming your views module is named 'blocks.views'
 
 
 class IndexViewTestCase(TestCase):

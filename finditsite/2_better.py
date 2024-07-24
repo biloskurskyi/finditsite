@@ -13,8 +13,9 @@ django.setup()
 
 import sys
 
-from blocks.models import KeyPoints, PhotoProcess
 from django.core.files import File
+
+from blocks.models import KeyPoints, PhotoProcess
 
 
 def create_photo_process(user_id):
