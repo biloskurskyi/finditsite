@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'blocks.apps.BlocksConfig',
 
     'core',
+    'blocks',
+
 ]
 
 MIDDLEWARE = [
