@@ -26,13 +26,13 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
 
     path('open_better_script/', views.open_better_script,
-         {'script_path': 'D:/work/project1/finditsite/1_better.py', 'redirect_path': 'work_prog_1',
+         {'script_path': '1_better.py', 'redirect_path': 'work_prog_1',
           'template_name': 'blocks/commonlog.html'}, name='open_better_script'),
     path('open_better_script2/', views.open_better_script,
          {'script_path': '2_better.py', 'redirect_path': 'work_prog_2',
           'template_name': 'blocks/isolationlog.html'}, name='open_better_script2'),
     path('open_better_script3/', views.open_better_script,
-         {'script_path': 'D:/work/project1/finditsite/3_better.py', 'redirect_path': 'work_prog_3',
+         {'script_path': '3_better.py', 'redirect_path': 'work_prog_3',
           'template_name': 'blocks/detectionlog.html'}, name='open_better_script3'),
 
     path('get_latest_photo/', views.get_latest_photo, {'category_id': '1'}, name='get_latest_photo'),
