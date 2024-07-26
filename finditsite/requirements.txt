@@ -8,3 +8,5 @@ isort==5.11.3
 requests==2.32.2
 celery==5.3.6
 Pillow
+numpy==1.18.0
+Cython==0.29.33
