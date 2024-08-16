@@ -103,7 +103,6 @@ def find_image(template_path, reference_path, user_id):
             print("Error: Неможливо змінити розмір відповідного зображення.")
 
 
-
 user_id = None
 if len(sys.argv) > 1:
     user_id = sys.argv[1]

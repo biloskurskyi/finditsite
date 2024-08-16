@@ -1,12 +1,15 @@
 Django==4.2
 djangorestframework==3.14.0
 drf-spectacular==0.26.1
-psycopg2-binary==2.9.1
+psycopg2-binary==2.9.9
 PyJWT==2.6.0
 django-cors-headers==3.14.0
 isort==5.11.3
 requests==2.32.2
 celery==5.3.6
 Pillow
-numpy==1.18.0
+numpy==2.0.1
 Cython==0.29.33
+python-decouple==3.7
+opencv-python==4.10.0.84
+opencv-python-headless==4.10.0.84
