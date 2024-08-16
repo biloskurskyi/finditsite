@@ -4,7 +4,6 @@ from tkinter import filedialog
 
 import cv2
 import django
-from celery import shared_task
 from django.core.files.base import ContentFile
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "finditsite.settings")
