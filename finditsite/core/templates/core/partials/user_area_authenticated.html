@@ -1,0 +1,6 @@
+{% load i18n %}
+<span class="nav-link">{{ request.user }}</span>
+<form class="logout" method="post" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit">{% translate "Log out" %}</button>
+</form>

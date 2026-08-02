@@ -11,6 +11,13 @@
 {% include "core/partials/header.html" %}
 
 <section class="content">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% block section %}{% endblock %}
 </section>
 

@@ -8,6 +8,8 @@
     --color-submit-hover: #006400;
     --color-action: #33e0ff;
     --color-action-hover: #0000ff;
+    --color-link: #add8e6;
+    --color-error: #ff8a80;
 
     --font-body: "Inter", sans-serif;
     --font-display: "jejugothic", sans-serif;
@@ -83,10 +85,33 @@ header {
     width: 107px;
 }
 
+.logout button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.logout button:hover {
+    text-decoration: underline;
+}
+
 .content {
     max-width: var(--content-width);
     height: auto;
     margin: 0 auto;
+}
+
+.messages {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+    color: var(--color-text-inverse);
+    font-family: var(--font-body);
+    font-size: var(--font-size-md);
 }
 
 .caption {
@@ -162,7 +187,26 @@ header {
 .registr input[type="password"] {
     width: 300px;
     height: var(--space-md);
+}
+
+.field {
     margin-bottom: var(--space-sm);
+}
+
+.helptext {
+    max-width: 300px;
+    margin-top: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.errorlist {
+    list-style-type: none;
+    padding: 0;
+    margin: var(--space-xs) 0 0;
+    max-width: 300px;
+    color: var(--color-error);
+    font-size: var(--font-size-sm);
 }
 
 .registr button[type="submit"] {
@@ -192,6 +236,10 @@ header {
     color: var(--color-text-inverse);
     font-family: var(--font-body);
     font-size: var(--font-size-sm);
+}
+
+.text-link {
+    color: var(--color-link);
 }
 
 .download-button {

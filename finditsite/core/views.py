@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
@@ -14,3 +15,8 @@ class TitleMixin:
 class LandingView(TitleMixin, TemplateView):
     template_name = "core/landing.html"
     title = _("FindIt")
+
+
+class MenuView(LoginRequiredMixin, TitleMixin, TemplateView):
+    template_name = "core/menu.html"
+    title = _("FindIt - Menu")
