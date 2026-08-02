@@ -10,15 +10,15 @@
         Log in and kickstart your search!{% endblocktranslate %}
 </div>
 <div class="three-img">
-    <div class="image-item">
+    <a class="image-item" href="{% url 'recognition:mode' processing_modes.COMMON_PIXELS %}">
         <img src="{% static 'core/images/photo1.jpg' %}" alt="{% translate "Common Pixels" %}">
-    </div>
-    <div class="image-item">
+    </a>
+    <a class="image-item" href="{% url 'recognition:mode' processing_modes.ISOLATION %}">
         <img src="{% static 'core/images/photo2.jpg' %}" alt="{% translate "Isolation" %}">
-    </div>
-    <div class="image-item">
+    </a>
+    <a class="image-item" href="{% url 'recognition:mode' processing_modes.DETECTION %}">
         <img src="{% static 'core/images/photo3.jpg' %}" alt="{% translate "Detection & Highlight" %}">
-    </div>
+    </a>
 </div>
 <div class="login-bottom">
     <a class="login-image-item" href="{% url 'accounts:login' %}">
