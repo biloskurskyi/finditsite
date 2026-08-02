@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 RATIO_THRESHOLD = 0.75
 MINIMUM_GOOD_MATCHES = 4
+RANSAC_REPROJECTION_THRESHOLD = 5.0
 
 TOO_FEW_FEATURES = _("One of the images has too few distinctive features to compare.")
 TOO_FEW_MATCHES = _("These two images do not have enough in common to compare.")
@@ -15,6 +16,14 @@ def decode_image(uploaded_file):
     return cv2.imdecode(
         np.frombuffer(uploaded_file.read(), dtype=np.uint8), cv2.IMREAD_COLOR
     )
+
+
+def normalize_dimensions(template_image, reference_image):
+    size = (
+        min(template_image.shape[1], reference_image.shape[1]),
+        min(template_image.shape[0], reference_image.shape[0]),
+    )
+    return cv2.resize(template_image, size), cv2.resize(reference_image, size)
 
 
 def find_matches(template_image, reference_image, matcher):
@@ -41,3 +50,18 @@ def find_matches(template_image, reference_image, matcher):
         raise ValidationError(TOO_FEW_MATCHES)
 
     return template_keypoints, reference_keypoints, good_matches
+
+
+def find_homography(template_keypoints, reference_keypoints, good_matches):
+    source_points = np.float32(
+        [template_keypoints[match.queryIdx].pt for match in good_matches]
+    ).reshape(-1, 1, 2)
+    destination_points = np.float32(
+        [reference_keypoints[match.trainIdx].pt for match in good_matches]
+    ).reshape(-1, 1, 2)
+    homography = cv2.findHomography(
+        source_points, destination_points, cv2.RANSAC, RANSAC_REPROJECTION_THRESHOLD
+    )[0]
+    if homography is None:
+        raise ValidationError(TOO_FEW_MATCHES)
+    return homography
