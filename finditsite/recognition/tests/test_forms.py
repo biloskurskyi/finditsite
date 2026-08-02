@@ -2,7 +2,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from recognition.forms import ResultUploadForm
-from recognition.tests.factories import (image_upload, matchable_images,
+from recognition.tests.factories import (damaged_image_upload, image_upload,
+                                         matchable_images,
+                                         oversized_dimensions_upload,
                                          oversized_image_upload,
                                          upload_payload)
 
@@ -56,3 +58,25 @@ class ResultUploadFormTests(TestCase):
         self.assertIn(
             "Each image must be 10 MB or smaller.", form.errors["reference_image"]
         )
+
+    def test_rejects_a_small_file_holding_too_many_pixels(self):
+        oversized = oversized_dimensions_upload()
+        files = upload_payload(self.template, self.reference)
+        files["reference_image"] = oversized
+
+        form = ResultUploadForm({}, files)
+
+        self.assertLess(oversized.size, 10 * 1024 * 1024)
+        self.assertFalse(form.is_valid())
+        self.assertIn(
+            "Each image must be 16 megapixels or smaller.",
+            form.errors["reference_image"],
+        )
+
+    def test_accepts_a_damaged_file_the_pipeline_has_to_reject(self):
+        files = upload_payload(self.template, self.reference)
+        files["reference_image"] = damaged_image_upload()
+
+        form = ResultUploadForm({}, files)
+
+        self.assertTrue(form.is_valid())

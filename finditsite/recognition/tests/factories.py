@@ -53,6 +53,19 @@ def oversized_image_upload():
     return SimpleUploadedFile("huge.png", encoded, content_type="image/png")
 
 
+def oversized_dimensions_upload():
+    flat = np.full((4200, 4200, 3), 128, dtype=np.uint8)
+    encoded = cv2.imencode(".jpg", flat)[1].tobytes()
+    return SimpleUploadedFile("wide.jpg", encoded, content_type="image/jpeg")
+
+
+def damaged_image_upload():
+    encoded = cv2.imencode(".jpg", matchable_images()[1])[1].tobytes()
+    return SimpleUploadedFile(
+        "damaged.jpg", encoded[: len(encoded) // 2], content_type="image/jpeg"
+    )
+
+
 def upload_payload(template, reference):
     return {
         "template_image": image_upload("template.jpg", template),

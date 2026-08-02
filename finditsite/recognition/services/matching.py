@@ -9,13 +9,17 @@ RANSAC_REPROJECTION_THRESHOLD = 5.0
 
 TOO_FEW_FEATURES = _("One of the images has too few distinctive features to compare.")
 TOO_FEW_MATCHES = _("These two images do not have enough in common to compare.")
+UNREADABLE_IMAGE = _("One of the images is damaged and could not be read.")
 
 
 def decode_image(uploaded_file):
     uploaded_file.seek(0)
-    return cv2.imdecode(
+    image = cv2.imdecode(
         np.frombuffer(uploaded_file.read(), dtype=np.uint8), cv2.IMREAD_COLOR
     )
+    if image is None:
+        raise ValidationError(UNREADABLE_IMAGE)
+    return image
 
 
 def normalize_dimensions(template_image, reference_image):
