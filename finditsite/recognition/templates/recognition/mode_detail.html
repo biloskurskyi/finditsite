@@ -1,11 +1,16 @@
 {% extends "core/base.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block section %}
 <div class="caption">{{ mode.label }}</div>
 <div class="description">
     {% include "recognition/partials/mode_instructions.html" %}
 </div>
+{% include "recognition/partials/upload_form.html" %}
 {% include "recognition/partials/result_panel.html" %}
 {% include "recognition/partials/history_list.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'core/js/upload.js' %}"></script>
 {% endblock %}

@@ -1,9 +1,12 @@
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
-from recognition.models import ProcessingMode
-from recognition.tests.factories import create_result
+from recognition.models import ProcessingMode, RecognitionResult
+from recognition.tests.factories import (TemporaryMediaRootMixin,
+                                         create_result, matchable_images,
+                                         unmatchable_images, upload_payload)
 
 
 class ModeRoutingTests(TestCase):
@@ -121,6 +124,93 @@ class ModeDetailTests(TestCase):
 
         self.assertEqual(len(response.context["result_dates"]), 2)
         self.assertContains(response, "History")
+
+
+class ResultCreateTests(TemporaryMediaRootMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.owner = User.objects.create_user(
+            username="owner", password="an-uncommon-passphrase"
+        )
+        self.stranger = User.objects.create_user(
+            username="stranger", password="an-uncommon-passphrase"
+        )
+        self.url = reverse("recognition:results", args=[ProcessingMode.COMMON_PIXELS])
+        self.template, self.reference = matchable_images()
+
+    def post_pair(self, template, reference):
+        return self.client.post(self.url, upload_payload(template, reference))
+
+    def test_an_anonymous_visitor_is_sent_to_the_login_page(self):
+        response = self.post_pair(self.template, self.reference)
+
+        self.assertRedirects(
+            response, f"{reverse('accounts:login')}?next={self.url}"
+        )
+        self.assertEqual(RecognitionResult.objects.count(), 0)
+
+    def test_renders_the_new_result_with_its_timestamp(self):
+        self.client.force_login(self.owner)
+
+        response = self.post_pair(self.template, self.reference)
+
+        result = RecognitionResult.objects.get()
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "recognition/mode_detail.html")
+        self.assertEqual(response.context["latest_result"], result)
+        self.assertContains(response, result.image.url)
+        self.assertEqual(len(response.context["result_dates"]), 1)
+
+    def test_records_the_result_against_its_owner_and_mode(self):
+        self.client.force_login(self.owner)
+
+        self.post_pair(self.template, self.reference)
+
+        result = RecognitionResult.objects.get()
+        self.assertEqual(result.user, self.owner)
+        self.assertEqual(result.mode, ProcessingMode.COMMON_PIXELS)
+
+    def test_another_user_does_not_see_the_result(self):
+        self.client.force_login(self.owner)
+        self.post_pair(self.template, self.reference)
+        self.client.force_login(self.stranger)
+
+        response = self.client.get(
+            reverse("recognition:mode", args=[ProcessingMode.COMMON_PIXELS])
+        )
+
+        self.assertIsNone(response.context["latest_result"])
+
+    def test_reports_an_invalid_upload_on_the_form(self):
+        self.client.force_login(self.owner)
+
+        response = self.client.post(
+            self.url,
+            {
+                "template_image": SimpleUploadedFile(
+                    "notes.txt", b"not an image", content_type="text/plain"
+                ),
+                "reference_image": upload_payload(self.template, self.reference)[
+                    "reference_image"
+                ],
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context["form"].errors)
+        self.assertEqual(RecognitionResult.objects.count(), 0)
+
+    def test_reports_images_that_cannot_be_compared_on_the_form(self):
+        self.client.force_login(self.owner)
+        square, circle = unmatchable_images()
+
+        response = self.post_pair(square, circle)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, "These two images do not have enough in common to compare."
+        )
+        self.assertEqual(RecognitionResult.objects.count(), 0)
 
 
 class ModeNavigationTests(TestCase):
