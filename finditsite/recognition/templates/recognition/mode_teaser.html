@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% load i18n static %}
+
+{% block section %}
+<div class="caption">{{ mode.label }}</div>
+<div class="description">
+    {% include "recognition/partials/mode_instructions.html" %}
+    {% url 'accounts:login' as login_url %}
+    {% blocktranslate %}Please <a class="text-link" href="{{ login_url }}">log in</a> and kickstart your
+        search!{% endblocktranslate %}
+</div>
+<div class="login-bottom">
+    <a class="login-image-item" href="{% url 'accounts:login' %}">
+        <img src="{% static 'core/images/login.png' %}" alt="{% translate "Log in" %}">
+    </a>
+</div>
+{% endblock %}

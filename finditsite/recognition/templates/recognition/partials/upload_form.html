@@ -1,0 +1,17 @@
+{% load i18n %}
+<form class="upload-form" method="post" enctype="multipart/form-data"
+      action="{% url 'recognition:results' mode %}">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+    <div class="field">
+        <div class="reginfo">{{ field.label }}</div>
+        {{ field }}
+        {{ field.errors }}
+    </div>
+    {% endfor %}
+    <div class="buttonsubmit">
+        <button class="download-button" type="submit"
+                data-loading-label="{% translate "Processing..." %}">{% translate "Compare the photos" %}</button>
+    </div>
+</form>

@@ -1,0 +1,11 @@
+{% load i18n %}
+<div class="history">{% translate "History" %}</div>
+<div class="history-dates">
+    <ul>
+        {% for date in result_dates %}
+        <li>{{ forloop.counter }}. {{ date }}</li>
+        {% empty %}
+        <li>{% translate "No runs yet." %}</li>
+        {% endfor %}
+    </ul>
+</div>

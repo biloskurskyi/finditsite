@@ -1,0 +1,3 @@
+{% for mode in processing_modes %}
+<a class="nav-link" href="{% url 'recognition:mode' mode %}">{{ mode.label }}</a>
+{% endfor %}

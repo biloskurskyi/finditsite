@@ -1,0 +1,11 @@
+{% load i18n %}
+<div class="final-img">
+    {% if latest_result %}
+    <img src="{{ latest_result.image.url }}" alt="{{ mode.label }}">
+    {% else %}
+    <p>{% translate "No result yet." %}</p>
+    {% endif %}
+</div>
+{% if latest_result %}
+<p class="image-date">{{ latest_result.created_at }}</p>
+{% endif %}
