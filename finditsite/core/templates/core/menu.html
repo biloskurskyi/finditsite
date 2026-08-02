@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+{% load i18n static %}
+
+{% block section %}
+<div class="caption">{% translate "FindIt" %}</div>
+<div class="description">
+    {% blocktranslate %}Choose a processing mode below. Upload a clear, noise-free photo of the item
+        together with a reference image to search in, and the finished result comes straight back to you
+        alongside the history of your recent runs.{% endblocktranslate %}
+</div>
+<div class="three-img">
+    <a class="image-item" href="{% url 'recognition:mode' processing_modes.COMMON_PIXELS %}">
+        <img src="{% static 'core/images/photo1.jpg' %}" alt="{% translate "Common Pixels" %}">
+        <p>{% blocktranslate %}Common Pixels finds the visual features your two photos have in common and
+            draws a line between every matching pair across a side-by-side view of both images.{% endblocktranslate %}</p>
+    </a>
+    <a class="image-item" href="{% url 'recognition:mode' processing_modes.ISOLATION %}">
+        <img src="{% static 'core/images/photo2.jpg' %}" alt="{% translate "Isolation" %}">
+        <p>{% blocktranslate %}Isolation aligns the photo of your item onto the geometry of the reference
+            image and shows the original next to that warped version, so you can see how the item maps
+            into the scene.{% endblocktranslate %}</p>
+    </a>
+    <a class="image-item" href="{% url 'recognition:mode' processing_modes.DETECTION %}">
+        <img src="{% static 'core/images/photo3.jpg' %}" alt="{% translate "Detection & Highlight" %}">
+        <p>{% blocktranslate %}Detection & Highlight locates your item inside the reference photo and
+            outlines it with a coloured quadrilateral, even when the item is small or easy to
+            miss.{% endblocktranslate %}</p>
+    </a>
+</div>
+{% endblock %}

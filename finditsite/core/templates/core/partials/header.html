@@ -1,0 +1,14 @@
+{% load i18n static %}
+<header>
+    <div class="container">
+        <div class="main">
+            <a class="navbar-brand" href="{{ home_url }}">
+                <img src="{% static 'core/images/logo.webp' %}" alt="{% translate "FindIt" %}">
+            </a>
+            {% include "core/partials/mode_nav.html" %}
+        </div>
+        <div class="login">
+            {% include user_area_partial %}
+        </div>
+    </div>
+</header>

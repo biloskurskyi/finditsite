@@ -1,0 +1,27 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="icon" type="image/webp" href="{% static 'core/images/logo.webp' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'core/css/styles.css' %}">
+</head>
+<body>
+{% include "core/partials/header.html" %}
+
+<section class="content">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% block section %}{% endblock %}
+</section>
+
+{% include "core/partials/footer.html" %}
+{% block scripts %}{% endblock %}
+</body>
+</html>
