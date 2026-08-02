@@ -5,8 +5,9 @@ from django.urls import reverse
 
 from recognition.models import ProcessingMode, RecognitionResult
 from recognition.tests.factories import (TemporaryMediaRootMixin,
-                                         create_result, matchable_images,
-                                         unmatchable_images, upload_payload)
+                                         create_result, damaged_image_upload,
+                                         matchable_images, unmatchable_images,
+                                         upload_payload)
 
 
 class ModeRoutingTests(TestCase):
@@ -149,10 +150,22 @@ class ResultCreateTests(TemporaryMediaRootMixin, TestCase):
         )
         self.assertEqual(RecognitionResult.objects.count(), 0)
 
-    def test_renders_the_new_result_with_its_timestamp(self):
+    def test_redirects_to_the_mode_page_after_a_successful_run(self):
         self.client.force_login(self.owner)
 
         response = self.post_pair(self.template, self.reference)
+
+        self.assertRedirects(
+            response,
+            reverse("recognition:mode", args=[ProcessingMode.COMMON_PIXELS]),
+        )
+
+    def test_renders_the_new_result_with_its_timestamp(self):
+        self.client.force_login(self.owner)
+
+        response = self.client.post(
+            self.url, upload_payload(self.template, self.reference), follow=True
+        )
 
         result = RecognitionResult.objects.get()
         self.assertEqual(response.status_code, 200)
@@ -160,6 +173,26 @@ class ResultCreateTests(TemporaryMediaRootMixin, TestCase):
         self.assertEqual(response.context["latest_result"], result)
         self.assertContains(response, result.image.url)
         self.assertEqual(len(response.context["result_dates"]), 1)
+
+    def test_does_not_answer_a_get(self):
+        self.client.force_login(self.owner)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 405)
+
+    def test_reports_a_damaged_image_on_the_form(self):
+        self.client.force_login(self.owner)
+        files = upload_payload(self.template, self.reference)
+        files["reference_image"] = damaged_image_upload()
+
+        response = self.client.post(self.url, files)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, "One of the images is damaged and could not be read."
+        )
+        self.assertEqual(RecognitionResult.objects.count(), 0)
 
     def test_records_the_result_against_its_owner_and_mode(self):
         self.client.force_login(self.owner)

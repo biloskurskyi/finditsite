@@ -5,11 +5,12 @@ from django.core.exceptions import ValidationError
 from django.test import SimpleTestCase, TestCase
 
 from recognition.models import ProcessingMode, RecognitionResult
-from recognition.services.matching import find_homography
+from recognition.services.matching import decode_image, find_homography
 from recognition.services.recognition import create_result
 from recognition.services.renderers import (QUADRILATERAL_COLORS,
                                             render_detection)
 from recognition.tests.factories import (TemporaryMediaRootMixin,
+                                         damaged_image_upload,
                                          featureless_image, image_upload,
                                          matchable_images, unmatchable_images)
 
@@ -116,6 +117,12 @@ class CreateResultTests(TemporaryMediaRootMixin, TestCase):
                     self.run_mode(mode, square, circle)
 
         self.assertEqual(RecognitionResult.objects.count(), 0)
+
+
+class DecodeImageTests(SimpleTestCase):
+    def test_rejects_a_damaged_file_instead_of_returning_nothing(self):
+        with self.assertRaises(ValidationError):
+            decode_image(damaged_image_upload())
 
 
 class FindHomographyTests(SimpleTestCase):

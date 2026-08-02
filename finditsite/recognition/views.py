@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
@@ -37,6 +38,10 @@ class ModeDetailView(ModeWorkspaceMixin, TemplateView):
 class ResultCreateView(LoginRequiredMixin, ModeWorkspaceMixin, FormView):
     template_name = "recognition/mode_detail.html"
     form_class = ResultUploadForm
+    http_method_names = ["post"]
+
+    def get_success_url(self):
+        return reverse("recognition:mode", kwargs={"mode": self.kwargs["mode"]})
 
     def form_valid(self, form):
         try:
@@ -49,4 +54,4 @@ class ResultCreateView(LoginRequiredMixin, ModeWorkspaceMixin, FormView):
         except ValidationError as error:
             form.add_error(None, error)
             return self.form_invalid(form)
-        return self.render_to_response(self.get_context_data(form=ResultUploadForm()))
+        return super().form_valid(form)
