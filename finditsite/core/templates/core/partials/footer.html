@@ -1,0 +1,19 @@
+{% load i18n static %}
+<footer>
+    <div class="row">
+        <div class="footer-text text-left col-lg-4">
+            <p>&copy; biloskurskyiCODE</p>
+        </div>
+        <div class="footer-text text-center col-lg-4">
+            <p>{% translate "Partial or complete copying of information from this site for distribution on other resources is strictly prohibited!" %}</p>
+        </div>
+        <div class="media-links col-lg-4">
+            <a href="https://t.me/biloskurskyi">
+                <img src="{% static 'core/images/tg.webp' %}" alt="{% translate "Telegram" %}">
+            </a>
+            <a href="https://www.linkedin.com/in/valerii-biloskurskyi-175429281/">
+                <img src="{% static 'core/images/in.webp' %}" alt="{% translate "LinkedIn" %}">
+            </a>
+        </div>
+    </div>
+</footer>

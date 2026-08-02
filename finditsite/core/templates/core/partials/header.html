@@ -1,0 +1,10 @@
+{% load i18n static %}
+<header>
+    <div class="container">
+        <div class="main">
+            <a class="navbar-brand" href="{% url 'core:landing' %}">
+                <img src="{% static 'core/images/logo.webp' %}" alt="{% translate "FindIt" %}">
+            </a>
+        </div>
+    </div>
+</header>

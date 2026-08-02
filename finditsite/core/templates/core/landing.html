@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+{% load i18n static %}
+
+{% block section %}
+<div class="caption">{% translate "FindIt" %}</div>
+<div class="description">
+    {% blocktranslate %}Greetings! FindIt is your friend for locating an item in space. How does it work?
+        Upload a clear, noise-free photo of the item and a reference image to search in.
+        Your result is rendered straight back to you. Below you will find the range of processing options.
+        Log in and kickstart your search!{% endblocktranslate %}
+</div>
+<div class="three-img">
+    <div class="image-item">
+        <img src="{% static 'core/images/photo1.jpg' %}" alt="{% translate "Common Pixels" %}">
+    </div>
+    <div class="image-item">
+        <img src="{% static 'core/images/photo2.jpg' %}" alt="{% translate "Isolation" %}">
+    </div>
+    <div class="image-item">
+        <img src="{% static 'core/images/photo3.jpg' %}" alt="{% translate "Detection & Highlight" %}">
+    </div>
+</div>
+<div class="login-bottom">
+    <div class="login-image-item">
+        <img src="{% static 'core/images/login.png' %}" alt="{% translate "Log in" %}">
+    </div>
+</div>
+{% endblock %}
