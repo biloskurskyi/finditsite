@@ -43,6 +43,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.navigation",
             ],
         },
     },
@@ -60,6 +61,10 @@ DATABASES = {
         "PORT": config("DB_PORT", cast=int),
     }
 }
+
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "core:menu"
+LOGOUT_REDIRECT_URL = "core:landing"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

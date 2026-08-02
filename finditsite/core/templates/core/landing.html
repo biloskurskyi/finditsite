@@ -21,8 +21,8 @@
     </div>
 </div>
 <div class="login-bottom">
-    <div class="login-image-item">
+    <a class="login-image-item" href="{% url 'accounts:login' %}">
         <img src="{% static 'core/images/login.png' %}" alt="{% translate "Log in" %}">
-    </div>
+    </a>
 </div>
 {% endblock %}
