@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.test import SimpleTestCase, TestCase
 
 from recognition.models import ProcessingMode, RecognitionResult
-from recognition.services.matching import decode_image, find_homography
+from recognition.services.matching import (RecognitionError, decode_image,
+                                           find_homography)
 from recognition.services.recognition import create_result
 from recognition.services.renderers import (QUADRILATERAL_COLORS,
                                             render_detection)
@@ -103,7 +103,7 @@ class CreateResultTests(TemporaryMediaRootMixin, TestCase):
     def test_rejects_images_without_distinctive_features(self):
         featureless = featureless_image()
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(RecognitionError):
             self.run_mode(ProcessingMode.COMMON_PIXELS, featureless, featureless)
 
         self.assertEqual(RecognitionResult.objects.count(), 0)
@@ -113,7 +113,7 @@ class CreateResultTests(TemporaryMediaRootMixin, TestCase):
 
         for mode in ProcessingMode:
             with self.subTest(mode=mode):
-                with self.assertRaises(ValidationError):
+                with self.assertRaises(RecognitionError):
                     self.run_mode(mode, square, circle)
 
         self.assertEqual(RecognitionResult.objects.count(), 0)
@@ -121,7 +121,7 @@ class CreateResultTests(TemporaryMediaRootMixin, TestCase):
 
 class DecodeImageTests(SimpleTestCase):
     def test_rejects_a_damaged_file_instead_of_returning_nothing(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(RecognitionError):
             decode_image(damaged_image_upload())
 
 
@@ -130,5 +130,5 @@ class FindHomographyTests(SimpleTestCase):
         keypoints = [cv2.KeyPoint(10.0, 10.0, 1.0) for _ in range(6)]
         matches = [cv2.DMatch(index, index, 0.0) for index in range(6)]
 
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(RecognitionError):
             find_homography(keypoints, keypoints, matches)

@@ -1,5 +1,4 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
@@ -7,6 +6,7 @@ from django.views.generic import FormView, TemplateView
 from core.views import TitleMixin
 from recognition.forms import ResultUploadForm
 from recognition.selectors import latest_result_for, recent_result_dates
+from recognition.services.matching import RecognitionError
 from recognition.services.recognition import create_result
 
 
@@ -51,7 +51,7 @@ class ResultCreateView(LoginRequiredMixin, ModeWorkspaceMixin, FormView):
                 form.cleaned_data["template_image"],
                 form.cleaned_data["reference_image"],
             )
-        except ValidationError as error:
-            form.add_error(None, error)
+        except RecognitionError as error:
+            form.add_error(None, str(error))
             return self.form_invalid(form)
         return super().form_valid(form)
