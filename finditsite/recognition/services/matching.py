@@ -3,6 +3,8 @@ import numpy as np
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from recognition.services.detectors import get_detector
+
 RATIO_THRESHOLD = 0.75
 MINIMUM_GOOD_MATCHES = 4
 RANSAC_REPROJECTION_THRESHOLD = 5.0
@@ -30,14 +32,10 @@ def normalize_dimensions(template_image, reference_image):
     return cv2.resize(template_image, size), cv2.resize(reference_image, size)
 
 
-def find_matches(template_image, reference_image, matcher):
-    detector = cv2.SIFT_create()
-    template_keypoints, template_descriptors = detector.detectAndCompute(
-        template_image, None
-    )
-    reference_keypoints, reference_descriptors = detector.detectAndCompute(
-        reference_image, None
-    )
+def find_matches(template_image, reference_image, matcher, detector=None):
+    detector = detector or get_detector()
+    template_keypoints, template_descriptors = detector.detect_and_compute(template_image)
+    reference_keypoints, reference_descriptors = detector.detect_and_compute(reference_image)
     if template_descriptors is None or reference_descriptors is None:
         raise ValidationError(TOO_FEW_FEATURES)
 

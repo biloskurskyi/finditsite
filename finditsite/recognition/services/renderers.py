@@ -2,12 +2,10 @@ import cv2
 import numpy as np
 
 from recognition.models import ProcessingMode
+from recognition.services.detectors import build_matcher, get_detector
 from recognition.services.matching import (find_homography, find_matches,
                                            normalize_dimensions)
 
-FLANN_INDEX_KDTREE = 1
-FLANN_TREES = 5
-FLANN_CHECKS = 50
 QUADRILATERAL_COLORS = [(0, 255, 0), (0, 0, 255), (255, 0, 0)]
 QUADRILATERAL_THICKNESS = 7
 
@@ -22,8 +20,9 @@ def corner_point(corners, index):
 
 
 def render_common_pixels(template_image, reference_image):
+    detector = get_detector()
     template_keypoints, reference_keypoints, good_matches = find_matches(
-        template_image, reference_image, cv2.BFMatcher()
+        template_image, reference_image, build_matcher(detector), detector
     )
     composite = cv2.drawMatches(
         template_image,
@@ -41,8 +40,9 @@ def render_isolation(template_image, reference_image):
     template_image, reference_image = normalize_dimensions(
         template_image, reference_image
     )
+    detector = get_detector()
     template_keypoints, reference_keypoints, good_matches = find_matches(
-        template_image, reference_image, cv2.BFMatcher()
+        template_image, reference_image, build_matcher(detector), detector
     )
     homography = find_homography(template_keypoints, reference_keypoints, good_matches)
     aligned_template = cv2.warpPerspective(
@@ -57,13 +57,12 @@ def render_detection(template_image, reference_image):
     template_image, reference_image = normalize_dimensions(
         template_image, reference_image
     )
+    detector = get_detector()
     template_keypoints, reference_keypoints, good_matches = find_matches(
         cv2.cvtColor(template_image, cv2.COLOR_BGR2GRAY),
         cv2.cvtColor(reference_image, cv2.COLOR_BGR2GRAY),
-        cv2.FlannBasedMatcher(
-            {"algorithm": FLANN_INDEX_KDTREE, "trees": FLANN_TREES},
-            {"checks": FLANN_CHECKS},
-        ),
+        build_matcher(detector, use_flann=True),
+        detector,
     )
     homography = find_homography(template_keypoints, reference_keypoints, good_matches)
     height, width = template_image.shape[:2]
