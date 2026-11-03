@@ -1,9 +1,12 @@
+from dataclasses import dataclass
+
 import cv2
 import numpy as np
+import numpy.typing as npt
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from recognition.services.detectors import get_detector
+from recognition.services.detectors import FeatureDetector, get_detector
 
 RATIO_THRESHOLD = 0.75
 MINIMUM_GOOD_MATCHES = 4
@@ -14,7 +17,14 @@ TOO_FEW_MATCHES = _("These two images do not have enough in common to compare.")
 UNREADABLE_IMAGE = _("One of the images is damaged and could not be read.")
 
 
-def decode_image(uploaded_file):
+@dataclass(frozen=True)
+class MatchResult:
+    template_keypoints: tuple[cv2.KeyPoint, ...]
+    reference_keypoints: tuple[cv2.KeyPoint, ...]
+    good_matches: list[cv2.DMatch]
+
+
+def decode_image(uploaded_file) -> npt.NDArray[np.uint8]:
     uploaded_file.seek(0)
     image = cv2.imdecode(
         np.frombuffer(uploaded_file.read(), dtype=np.uint8), cv2.IMREAD_COLOR
@@ -24,7 +34,9 @@ def decode_image(uploaded_file):
     return image
 
 
-def normalize_dimensions(template_image, reference_image):
+def normalize_dimensions(
+    template_image: npt.NDArray[np.uint8], reference_image: npt.NDArray[np.uint8]
+) -> tuple[npt.NDArray[np.uint8], npt.NDArray[np.uint8]]:
     size = (
         min(template_image.shape[1], reference_image.shape[1]),
         min(template_image.shape[0], reference_image.shape[0]),
@@ -32,7 +44,12 @@ def normalize_dimensions(template_image, reference_image):
     return cv2.resize(template_image, size), cv2.resize(reference_image, size)
 
 
-def find_matches(template_image, reference_image, matcher, detector=None):
+def find_matches(
+    template_image: npt.NDArray[np.uint8],
+    reference_image: npt.NDArray[np.uint8],
+    matcher: cv2.DescriptorMatcher,
+    detector: FeatureDetector | None = None,
+) -> MatchResult:
     detector = detector or get_detector()
     template_keypoints, template_descriptors = detector.detect_and_compute(template_image)
     reference_keypoints, reference_descriptors = detector.detect_and_compute(reference_image)
@@ -51,10 +68,14 @@ def find_matches(template_image, reference_image, matcher, detector=None):
     if len(good_matches) < MINIMUM_GOOD_MATCHES:
         raise ValidationError(TOO_FEW_MATCHES)
 
-    return template_keypoints, reference_keypoints, good_matches
+    return MatchResult(template_keypoints, reference_keypoints, good_matches)
 
 
-def find_homography(template_keypoints, reference_keypoints, good_matches):
+def find_homography(
+    template_keypoints: tuple[cv2.KeyPoint, ...],
+    reference_keypoints: tuple[cv2.KeyPoint, ...],
+    good_matches: list[cv2.DMatch],
+) -> npt.NDArray[np.float64]:
     source_points = np.float32(
         [template_keypoints[match.queryIdx].pt for match in good_matches]
     ).reshape(-1, 1, 2)

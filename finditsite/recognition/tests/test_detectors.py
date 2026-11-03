@@ -35,5 +35,5 @@ class OrbMatchingTests(SimpleTestCase):
         shifted = np.roll(board, (20, 30), axis=(0, 1))
         detector = get_detector("orb")
         matcher = build_matcher(detector)
-        _, _, good_matches = find_matches(board, shifted, matcher, detector)
-        self.assertGreaterEqual(len(good_matches), 4)
+        result = find_matches(board, shifted, matcher, detector)
+        self.assertGreaterEqual(len(result.good_matches), 4)
