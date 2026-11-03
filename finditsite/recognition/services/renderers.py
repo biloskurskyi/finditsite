@@ -21,15 +21,15 @@ def corner_point(corners, index):
 
 def render_common_pixels(template_image, reference_image):
     detector = get_detector()
-    template_keypoints, reference_keypoints, good_matches = find_matches(
+    match = find_matches(
         template_image, reference_image, build_matcher(detector), detector
     )
     composite = cv2.drawMatches(
         template_image,
-        template_keypoints,
+        match.template_keypoints,
         reference_image,
-        reference_keypoints,
-        good_matches,
+        match.reference_keypoints,
+        match.good_matches,
         None,
         flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS,
     )
@@ -41,10 +41,10 @@ def render_isolation(template_image, reference_image):
         template_image, reference_image
     )
     detector = get_detector()
-    template_keypoints, reference_keypoints, good_matches = find_matches(
+    match = find_matches(
         template_image, reference_image, build_matcher(detector), detector
     )
-    homography = find_homography(template_keypoints, reference_keypoints, good_matches)
+    homography = find_homography(match.template_keypoints, match.reference_keypoints, match.good_matches)
     aligned_template = cv2.warpPerspective(
         template_image,
         homography,
@@ -58,13 +58,13 @@ def render_detection(template_image, reference_image):
         template_image, reference_image
     )
     detector = get_detector()
-    template_keypoints, reference_keypoints, good_matches = find_matches(
+    match = find_matches(
         cv2.cvtColor(template_image, cv2.COLOR_BGR2GRAY),
         cv2.cvtColor(reference_image, cv2.COLOR_BGR2GRAY),
         build_matcher(detector, use_flann=True),
         detector,
     )
-    homography = find_homography(template_keypoints, reference_keypoints, good_matches)
+    homography = find_homography(match.template_keypoints, match.reference_keypoints, match.good_matches)
     height, width = template_image.shape[:2]
     template_corners = np.float32(
         [[0, 0], [width, 0], [width, height], [0, height]]
