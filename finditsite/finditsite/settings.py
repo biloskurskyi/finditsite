@@ -99,4 +99,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+RECOGNITION_DETECTOR = config("RECOGNITION_DETECTOR", default="sift")
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
